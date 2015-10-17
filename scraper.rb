@@ -14,11 +14,10 @@ def reprocess_csv(file)
   csv = CSV.parse(raw, headers: true, header_converters: :symbol)
   csv.each do |row|
     data = row.to_hash.each { |k, v| v = v.to_s.gsub(/[[:space:]]+/, ' ').strip }
-    data[:constituency] = "%s %s" % [ data[:area], data[:num] ]
-    data[:constituency_id] = "%s-%s" % [ data[:area].downcase, data[:num] ]
-    data[:term] = '2013'
+    data[:area_id] = data[:area].downcase
     data[:gender] = data[:gender].downcase
-    %i(area num).each { |i| data.delete i }
+    data[:term] = '2013'
+    %i(num).each { |i| data.delete i }
     ScraperWiki.save_sqlite([:name, :name, :term], data)
   end
 end
